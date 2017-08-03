@@ -1,20 +1,23 @@
 import React, { Component } from 'react';
-import {Map, FeatureGroup, Popup, TileLayer} from 'react-leaflet';
-import StopService from './services/stopService.jsx';
+import {Map, FeatureGroup, TileLayer} from 'react-leaflet';
+import stopService from '../services/stopService.jsx';
+import StopComponent from './StopComponent.jsx';
 
-class App extends Component {
+class MapComponent extends Component {
   constructor(props) {
     super(props)
     this.state = {
       viewPosition: [60.230605, 25.029178],
       userPosition: null,
       height: window.innerHeight,
-      zoom: 15,
+      zoom: 17,
       stops: []
     }
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
     this.fetchStops = this.fetchStops.bind(this);
-    this.onDrag = this.onDrag.bind(this);
+    this.onMoveEvent = this.onMoveEvent.bind(this);
+    this.getStopComponents = this.getStopComponents.bind(this);
+    this.changeViewPosition = this.changeViewPosition.bind(this);
   }
 
   componentWillMount() {
@@ -45,8 +48,7 @@ class App extends Component {
     });
   }
 
-  onDrag(e) {
-    console.log(e.target.getZoom())
+  onMoveEvent(e) {
     var center = e.target.getCenter();
     this.setState({
       viewPosition: [center.lat, center.lng],
@@ -54,16 +56,46 @@ class App extends Component {
     })
   }
 
+  changeViewPosition(coords) {
+    this.setState({
+      viewPosition: coords
+    })
+  }
+
+  getStopComponents() {
+    if (this.state.zoom < 15) return;
+    var leafletCircles = this.state.stops.map((stop) => {
+      // **
+      // TODO fix backend so it returns floats rather than string
+      var coords = stop.coords.split(',');
+      coords = [parseFloat(coords[0]), parseFloat(coords[1])];
+      //**
+      if (!stopService.isWithinViewDistance(coords, this.state.viewPosition, this.state.zoom)) return;
+      return (
+        <StopComponent
+          key={stop.code}
+          coords={coords}
+          type={stop.type}
+          zoom={this.state.zoom}
+          code={stop.code}
+          changeViewPosition={this.changeViewPosition}
+        />
+      )
+    });
+    return leafletCircles;
+  }
+
   render() {
     return (
-      <div className="App">
+      <div className="MapComponent">
         <Map
           center={this.state.viewPosition}
           style={{height:this.state.height}}
           zoom={this.state.zoom}
           minZoom={13}
-          maxZoom={18}
-          onDragEnd={(e) => {this.onDrag(e)}}
+          maxZoom={19}
+          onDragEnd={(e) => {this.onMoveEvent(e)}}
+          onZoom={(e) => {this.onMoveEvent(e)}}
           >
           <TileLayer
             url='http://api.digitransit.fi/map/v1/{id}/{z}/{x}/{y}.png'
@@ -71,7 +103,7 @@ class App extends Component {
             id='hsl-map'
           />
           <FeatureGroup>
-            {this.state.stops.map((stop) => StopService.getLeafletCircle(stop, this.state.viewPosition))}
+            {this.getStopComponents()}
           </FeatureGroup>
         </Map>
       </div>
@@ -79,4 +111,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default MapComponent;

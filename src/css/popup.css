@@ -1,0 +1,53 @@
+
+.leaflet-popup-content-wrapper {
+  width:220px;
+}
+
+.leaflet-popup-content-wrapper .popupContent {
+  margin:0px;
+  padding:0px;
+}
+
+.leaflet-popup-content-wrapper .name {
+  margin:0px;
+  padding:0px;
+}
+
+.leaflet-popup-content-wrapper .address {
+  color: grey;
+  margin:0px;
+  padding:0px;
+}
+
+.leaflet-popup-content-wrapper .timetable {
+  margin:0px;
+  padding:0px;
+}
+
+.leaflet-popup-content-wrapper .destination{
+  margin:0px;
+  padding:0px;
+  color:#8a8a8a;
+}
+.leaflet-popup-content-wrapper .transitInfo{
+  margin:0px;
+  padding:0px;
+  white-space: nowrap;
+}
+
+.leaflet-popup-content-wrapper .bus {
+  color:blue;
+  margin:0px;
+  padding:0px;
+}
+.leaflet-popup-content-wrapper .tram {
+  color:green;
+}
+.leaflet-popup-content-wrapper .train {
+  color:purple;
+}
+.leaflet-popup-content-wrapper .metro {
+  color:orange;
+}
+/*<p style=color:grey;margin:0px;padding:0px>"
+ + data[0].address_fi + "<a style=margin:0px;padding:0px target=_blank href=" + data[0].timetable_link + ">" + " " + data[0].code_short + "</a></p>";*/
