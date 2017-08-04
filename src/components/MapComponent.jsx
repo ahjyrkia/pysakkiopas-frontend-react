@@ -4,15 +4,17 @@ import stopService from '../services/stopService.jsx';
 import StopComponent from './StopComponent.jsx';
 import UserComponent from './UserComponent.jsx';
 
+import '../css/popup.css';
+
 class MapComponent extends Component {
   constructor(props) {
     super(props)
     this.state = {
       leafletMap: null,
-      viewPosition: [60.20474009, 24.96227860],
+      viewPosition: [60.165426, 24.935081],
       userPosition: [0,0],
       height: window.innerHeight,
-      zoom: 17,
+      zoom: 15,
       stops: [],
       panToUserLocation: true
     }
@@ -70,9 +72,10 @@ class MapComponent extends Component {
     const leafletMapNode = this.state.leafletMap;
     if (this.state.panToUserLocation) {
       leafletMapNode.panTo(e.latlng);
+      leafletMapNode.setZoom(17);
       this.setState({
         viewPosition: [e.latlng.lat, e.latlng.lng],
-        panToUserLocation: true
+        panToUserLocation: false
       })
     }
     this.setState({
@@ -81,7 +84,7 @@ class MapComponent extends Component {
   }
 
   getStopComponents() {
-    if (this.state.zoom < 15) return;
+    //if (this.state.zoom < 15) return;
     var leafletCircles = this.state.stops.map((stop) => {
       // **
       // TODO fix backend so it returns floats rather than string
@@ -114,7 +117,7 @@ class MapComponent extends Component {
           zoom={this.state.zoom}
           minZoom={13}
           maxZoom={19}
-          ondragend={(e) => {this.onMoveEvent(e)}}
+          onMoveend={(e) => {this.onMoveEvent(e)}}
           onZoomEnd={(e) => {this.onZoomEvent(e)}}
           onlocationfound={(e) => {this.userLocationEvent(e)}}
           >

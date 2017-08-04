@@ -14,12 +14,18 @@
 }
 
 .leaflet-popup-content-wrapper .address {
-  color: grey;
   margin:0px;
   padding:0px;
+  font-family: Gotham Rounded SSm A,Gotham Rounded SSm B,Arial,Georgia,Serif;
+  font-weight: 400;
+  font-size: 0.8rem;
+  color: #888;
 }
 
 .leaflet-popup-content-wrapper .timetable {
+  font-weight: 400;
+  letter-spacing: 0;
+  font-size: 0.9rem;
   margin:0px;
   padding:0px;
 }
@@ -27,7 +33,8 @@
 .leaflet-popup-content-wrapper .destination{
   margin:0px;
   padding:0px;
-  color:#8a8a8a;
+  color: #333;
+  font-weight: 300 !important;
 }
 .leaflet-popup-content-wrapper .transitInfo{
   margin:0px;
@@ -37,8 +44,6 @@
 
 .leaflet-popup-content-wrapper .bus {
   color:blue;
-  margin:0px;
-  padding:0px;
 }
 .leaflet-popup-content-wrapper .tram {
   color:green;
@@ -49,5 +54,3 @@
 .leaflet-popup-content-wrapper .metro {
   color:orange;
 }
-/*<p style=color:grey;margin:0px;padding:0px>"
- + data[0].address_fi + "<a style=margin:0px;padding:0px target=_blank href=" + data[0].timetable_link + ">" + " " + data[0].code_short + "</a></p>";*/

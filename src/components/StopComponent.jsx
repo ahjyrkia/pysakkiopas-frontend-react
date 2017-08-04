@@ -63,9 +63,12 @@ class StopComponent extends Component {
   parseTimetableRow(departure) {
     //TODO
     //this is garbage that should be burned when backend is updated
-    var time = ""+departure.time;
+
+    var time = departure.time;
+    if (time >= 2400) time = time-2400;
+    var time = ""+time;
     if (time.length === 3) {
-      time = "0" + time;
+      time = " " + time;
     }
     time = time.substr(0,2)+"."+time.substr(2,3);
     var code = departure.code.split("  ")[0];
@@ -91,7 +94,7 @@ class StopComponent extends Component {
       parsedCode = code.substr(2,).split(" ")[0];
       type = "tram";
     }
-    return (<b>{time + " "}<b className={type}>{parsedCode}</b><span className="destination">{" "+destination}</span></b>)
+    return (<b>{time + " "}<b className={type}>{parsedCode}</b><b className="destination">{" "+destination}</b></b>)
   }
 
   getStopData(e, code) {
@@ -115,9 +118,11 @@ class StopComponent extends Component {
         center={this.props.coords}
         radius={config.radius[this.props.zoom]}
         color={config.colors[this.props.type]}
-        onClick={(e) => {this.getStopData(e, this.props.code)}}>
+        onClick={(e) => {this.getStopData(e, this.props.code)}}
+        >
         <Popup
           keepInView={false}
+          autoPan={false}
           minWidth={"auto"}>
           {this.generatePopupContent()}
         </Popup>
