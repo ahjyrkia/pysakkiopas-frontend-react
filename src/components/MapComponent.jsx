@@ -118,8 +118,8 @@ class MapComponent extends Component {
           onlocationfound={(e) => {this.userLocationEvent(e)}}
           >
           <TileLayer
-            url='http://api.digitransit.fi/map/v1/{id}/{z}/{x}/{y}.png'
-            attribution='Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, '
+            url='https://api.digitransit.fi/map/v1/{id}/{z}/{x}/{y}.png'
+            attribution='Map data &copy; <a href="https://openstreetmap.org">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, '
             id='hsl-map'
           />
           <FeatureGroup>
