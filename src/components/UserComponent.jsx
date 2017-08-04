@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { Circle, Popup } from 'react-leaflet';
+import React from 'react';
+import { Circle } from 'react-leaflet';
 import config from '../config.jsx';
 
 const UserComponent = (props) => {

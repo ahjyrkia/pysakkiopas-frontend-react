@@ -19,7 +19,7 @@ class MapComponent extends Component {
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
     this.onMoveEvent = this.onMoveEvent.bind(this);
     this.getStopComponents = this.getStopComponents.bind(this);
-    this.changeViewPosition = this.changeViewPosition.bind(this);
+    this.stops = [];
   }
 
   componentWillMount() {
@@ -31,7 +31,6 @@ class MapComponent extends Component {
   }
 
   componentDidMount() {
-    this.updateWindowDimensions();
     window.addEventListener('resize', this.updateWindowDimensions);
     const leafletMapNode = this.leafletMap.leafletElement;
     leafletMapNode.locate({
@@ -57,6 +56,12 @@ class MapComponent extends Component {
     })
   }
 
+  onZoomEvent(e) {
+    this.setState({
+      zoom: e.target.getZoom()
+    })
+  }
+
   userLocationEvent = (e) => {
     const leafletMapNode = this.state.leafletMap;
     if (this.state.panToUserLocation) {
@@ -71,15 +76,10 @@ class MapComponent extends Component {
     })
   }
 
-  changeViewPosition(coords) {
-    this.setState({
-      viewPosition: coords
-    })
-  }
-
   getStopComponents() {
     if (this.state.zoom < 15) return;
-    var leafletCircles = this.state.stops.map((stop) => {
+    var stops = this.state.stops;
+    var leafletCircles = stops.map((stop) => {
       // **
       // TODO fix backend so it returns floats rather than string
       var coords = stop.coords.split(',');
@@ -93,7 +93,6 @@ class MapComponent extends Component {
           type={stop.type}
           zoom={this.state.zoom}
           code={stop.code}
-          changeViewPosition={this.changeViewPosition}
           map={this.state.leafletMap}
         />
       )
@@ -112,7 +111,7 @@ class MapComponent extends Component {
           minZoom={13}
           maxZoom={19}
           onDragEnd={(e) => {this.onMoveEvent(e)}}
-          onZoom={(e) => {this.onMoveEvent(e)}}
+          onZoom={(e) => {this.onZoomEvent(e)}}
           onlocationfound={(e) => {this.userLocationEvent(e)}}
           >
           <TileLayer
@@ -121,7 +120,7 @@ class MapComponent extends Component {
             id='hsl-map'
           />
           <FeatureGroup>
-            {this.getStopComponents()}
+            // {this.getStopComponents()}
             <UserComponent
               coords={this.state.userPosition}
               zoom={this.state.zoom}

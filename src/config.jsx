@@ -2,7 +2,7 @@ const config = {
   colors: {
     "0":"Green",
     "1":"Orange",
-    "3": "blue",
+    "3": "#0064fa",
     "109": "Purple",
     "user": "Black"
   },
@@ -11,7 +11,9 @@ const config = {
     18: 3,
     17: 5,
     16: 6,
-    15: 3
+    15: 3,
+    14: 3,
+    13: 3
   }
 }
 
