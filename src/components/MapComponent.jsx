@@ -67,25 +67,24 @@ class MapComponent extends Component {
     if (this.state.panToUserLocation) {
       leafletMapNode.panTo(e.latlng);
       this.setState({
-        viewPosition: e.latlng,
+        viewPosition: [e.latlng.lat, e.latlng.lng],
         panToUserLocation: false
       })
     }
     this.setState({
-      userPosition: e.latlng
+      userPosition: [e.latlng.lat, e.latlng.lng]
     })
   }
 
   getStopComponents() {
-    if (this.state.zoom < 15) return;
-    var stops = this.state.stops;
-    var leafletCircles = stops.map((stop) => {
+    // if (this.state.zoom < 15) return;
+    var leafletCircles = this.state.stops.map((stop) => {
       // **
       // TODO fix backend so it returns floats rather than string
       var coords = stop.coords.split(',');
       coords = [parseFloat(coords[0]), parseFloat(coords[1])];
       //**
-      if (!stopService.isWithinViewDistance(coords, this.state.viewPosition, this.state.zoom)) return;
+      if (stopService.isWithinViewDistance(coords, this.state.viewPosition, this.state.zoom)) {
       return (
         <StopComponent
           key={stop.code}
@@ -96,7 +95,9 @@ class MapComponent extends Component {
           map={this.state.leafletMap}
         />
       )
+    }
     });
+    // console.log(leafletCircles)
     return leafletCircles;
   }
 
@@ -120,7 +121,7 @@ class MapComponent extends Component {
             id='hsl-map'
           />
           <FeatureGroup>
-            // {this.getStopComponents()}
+            {this.getStopComponents()}
             <UserComponent
               coords={this.state.userPosition}
               zoom={this.state.zoom}
