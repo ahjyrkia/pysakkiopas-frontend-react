@@ -84,7 +84,7 @@ class MapComponent extends Component {
       var coords = stop.coords.split(',');
       coords = [parseFloat(coords[0]), parseFloat(coords[1])];
       //**
-      if (stopService.isWithinViewDistance(coords, this.state.viewPosition, this.state.zoom)) {
+      if (!stopService.isWithinViewDistance(coords, this.state.viewPosition, this.state.zoom)) return;
       return (
         <StopComponent
           key={stop.code}
@@ -95,7 +95,7 @@ class MapComponent extends Component {
           map={this.state.leafletMap}
         />
       )
-    }
+
     });
     // console.log(leafletCircles)
     return leafletCircles;
@@ -121,7 +121,6 @@ class MapComponent extends Component {
             id='hsl-map'
           />
           <FeatureGroup>
-            {this.getStopComponents()}
             <UserComponent
               coords={this.state.userPosition}
               zoom={this.state.zoom}
