@@ -19,4 +19,14 @@ const fetchStopData = (code) => {
   });
 }
 
-export default { isWithinViewDistance, fetchStopData };
+const fetchStopsData = () => {
+  return fetch('https://pysakkiopas-backend.herokuapp.com/stop')
+    .then((response) => response.json())
+    .then((responseJson) => {
+      return responseJson;
+    })
+    .catch((error) => {
+      console.error(error);
+  });
+}
+export default { isWithinViewDistance, fetchStopData, fetchStopsData };

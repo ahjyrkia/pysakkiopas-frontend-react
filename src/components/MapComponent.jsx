@@ -2,31 +2,45 @@ import React, { Component } from 'react';
 import {Map, FeatureGroup, TileLayer} from 'react-leaflet';
 import stopService from '../services/stopService.jsx';
 import StopComponent from './StopComponent.jsx';
+import UserComponent from './UserComponent.jsx';
 
 class MapComponent extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      viewPosition: [60.230605, 25.029178],
-      userPosition: null,
+      leafletMap: null,
+      viewPosition: [60.20474009, 24.96227860],
+      userPosition: [0,0],
       height: window.innerHeight,
       zoom: 17,
-      stops: []
+      stops: [],
+      panToUserLocation: true
     }
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
-    this.fetchStops = this.fetchStops.bind(this);
     this.onMoveEvent = this.onMoveEvent.bind(this);
     this.getStopComponents = this.getStopComponents.bind(this);
     this.changeViewPosition = this.changeViewPosition.bind(this);
   }
 
   componentWillMount() {
-    this.fetchStops();
+    stopService.fetchStopsData().then((response) => {
+      this.setState({
+        stops: response
+      })
+    });
   }
 
   componentDidMount() {
     this.updateWindowDimensions();
     window.addEventListener('resize', this.updateWindowDimensions);
+    const leafletMapNode = this.leafletMap.leafletElement;
+    leafletMapNode.locate({
+      watch: true,
+      enableHighAccuracy: true
+    });
+    this.setState({
+      leafletMap: leafletMapNode
+    })
   }
 
   updateWindowDimensions() {
@@ -35,24 +49,25 @@ class MapComponent extends Component {
     })
   }
 
-  fetchStops() {
-    return fetch('https://pysakkiopas-backend.herokuapp.com/stop')
-      .then((response) => response.json())
-      .then((responseJson) => {
-        this.setState({
-          stops: responseJson
-        })
-      })
-      .catch((error) => {
-        console.error(error);
-    });
-  }
-
   onMoveEvent(e) {
     var center = e.target.getCenter();
     this.setState({
       viewPosition: [center.lat, center.lng],
       zoom: e.target.getZoom()
+    })
+  }
+
+  userLocationEvent = (e) => {
+    const leafletMapNode = this.state.leafletMap;
+    if (this.state.panToUserLocation) {
+      leafletMapNode.panTo(e.latlng);
+      this.setState({
+        viewPosition: e.latlng,
+        panToUserLocation: false
+      })
+    }
+    this.setState({
+      userPosition: e.latlng
     })
   }
 
@@ -79,6 +94,7 @@ class MapComponent extends Component {
           zoom={this.state.zoom}
           code={stop.code}
           changeViewPosition={this.changeViewPosition}
+          map={this.state.leafletMap}
         />
       )
     });
@@ -89,6 +105,7 @@ class MapComponent extends Component {
     return (
       <div className="MapComponent">
         <Map
+          ref={map => {this.leafletMap = map;}}
           center={this.state.viewPosition}
           style={{height:this.state.height}}
           zoom={this.state.zoom}
@@ -96,6 +113,7 @@ class MapComponent extends Component {
           maxZoom={19}
           onDragEnd={(e) => {this.onMoveEvent(e)}}
           onZoom={(e) => {this.onMoveEvent(e)}}
+          onlocationfound={(e) => {this.userLocationEvent(e)}}
           >
           <TileLayer
             url='http://api.digitransit.fi/map/v1/{id}/{z}/{x}/{y}.png'
@@ -104,6 +122,11 @@ class MapComponent extends Component {
           />
           <FeatureGroup>
             {this.getStopComponents()}
+            <UserComponent
+              coords={this.state.userPosition}
+              zoom={this.state.zoom}
+              type={"user"}
+            />
           </FeatureGroup>
         </Map>
       </div>

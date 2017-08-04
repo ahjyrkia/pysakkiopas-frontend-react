@@ -94,9 +94,9 @@ class StopComponent extends Component {
     return (<b>{time + " "}<b className={type}>{parsedCode}</b><span className="destination">{" "+destination}</span></b>)
   }
 
-  getStopData(code) {
+  getStopData(e, code) {
     stopService.fetchStopData(code).then((response) => {
-      console.log(response);
+      this.props.map.panTo(e.latlng);
       this.setState({
         contentExists: true,
         name: response[0].name_fi,
@@ -115,10 +115,9 @@ class StopComponent extends Component {
         center={this.props.coords}
         radius={config.radius[this.props.zoom]}
         color={config.colors[this.props.type]}
-        onClick={(e) => {this.getStopData(this.props.code)}}>
+        onClick={(e) => {this.getStopData(e, this.props.code)}}>
         <Popup
           keepInView={false}
-          autoPan={true}
           minWidth={"auto"}>
           {this.generatePopupContent()}
         </Popup>

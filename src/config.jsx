@@ -3,7 +3,8 @@ const config = {
     "0":"Green",
     "1":"Orange",
     "3": "blue",
-    "109": "Purple"
+    "109": "Purple",
+    "user": "Black"
   },
   radius: {
     19: 2,
