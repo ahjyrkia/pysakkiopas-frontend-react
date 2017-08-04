@@ -113,7 +113,7 @@ class MapComponent extends Component {
           zoom={this.state.zoom}
           minZoom={13}
           maxZoom={19}
-          onMoveEnd={(e) => {this.onMoveEvent(e)}}
+          ondragend={(e) => {this.onMoveEvent(e)}}
           onZoomEnd={(e) => {this.onZoomEvent(e)}}
           onlocationfound={(e) => {this.userLocationEvent(e)}}
           >
