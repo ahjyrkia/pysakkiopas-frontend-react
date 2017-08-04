@@ -50,6 +50,7 @@ class MapComponent extends Component {
 
   onMoveEvent(e) {
     var center = e.target.getCenter();
+    if (center.lat == null || center.lng == null) return;
     this.setState({
       viewPosition: [center.lat, center.lng],
       zoom: e.target.getZoom()
@@ -57,8 +58,10 @@ class MapComponent extends Component {
   }
 
   onZoomEvent(e) {
+    var z = e.target.getZoom();
+    if (z == null) return;
     this.setState({
-      zoom: e.target.getZoom()
+      zoom: z
     })
   }
 
@@ -68,7 +71,7 @@ class MapComponent extends Component {
       leafletMapNode.panTo(e.latlng);
       this.setState({
         viewPosition: [e.latlng.lat, e.latlng.lng],
-        panToUserLocation: false
+        panToUserLocation: true
       })
     }
     this.setState({
@@ -77,7 +80,7 @@ class MapComponent extends Component {
   }
 
   getStopComponents() {
-    // if (this.state.zoom < 15) return;
+    if (this.state.zoom < 15) return;
     var leafletCircles = this.state.stops.map((stop) => {
       // **
       // TODO fix backend so it returns floats rather than string
@@ -97,7 +100,6 @@ class MapComponent extends Component {
       )
 
     });
-    // console.log(leafletCircles)
     return leafletCircles;
   }
 
@@ -111,8 +113,8 @@ class MapComponent extends Component {
           zoom={this.state.zoom}
           minZoom={13}
           maxZoom={19}
-          onDragEnd={(e) => {this.onMoveEvent(e)}}
-          onZoom={(e) => {this.onZoomEvent(e)}}
+          onMoveEnd={(e) => {this.onMoveEvent(e)}}
+          onZoomEnd={(e) => {this.onZoomEvent(e)}}
           onlocationfound={(e) => {this.userLocationEvent(e)}}
           >
           <TileLayer
@@ -121,6 +123,7 @@ class MapComponent extends Component {
             id='hsl-map'
           />
           <FeatureGroup>
+            {this.getStopComponents()}
             <UserComponent
               coords={this.state.userPosition}
               zoom={this.state.zoom}
