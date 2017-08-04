@@ -33,9 +33,10 @@ class MapComponent extends Component {
   componentDidMount() {
     window.addEventListener('resize', this.updateWindowDimensions);
     const leafletMapNode = this.leafletMap.leafletElement;
+    leafletMapNode.invalidateSize();
     leafletMapNode.locate({
       watch: true,
-      enableHighAccuracy: true
+      enableHighAccuracy: false
     });
     this.setState({
       leafletMap: leafletMapNode
