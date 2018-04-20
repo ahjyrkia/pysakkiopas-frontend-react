@@ -14,7 +14,7 @@ class MapComponent extends Component {
       viewPosition: [60.165426, 24.935081],
       userPosition: [0,0],
       height: window.innerHeight,
-      zoom: 15,
+      zoom: 17,
       stops: [],
       panToUserLocation: true
     }
@@ -38,7 +38,7 @@ class MapComponent extends Component {
     leafletMapNode.invalidateSize();
     leafletMapNode.locate({
       watch: true,
-      enableHighAccuracy: false
+      enableHighAccuracy: true
     });
     this.setState({
       leafletMap: leafletMapNode
@@ -115,7 +115,7 @@ class MapComponent extends Component {
           center={this.state.viewPosition}
           style={{height:this.state.height}}
           zoom={this.state.zoom}
-          minZoom={13}
+          minZoom={15}
           maxZoom={19}
           onMoveend={(e) => {this.onMoveEvent(e)}}
           onZoomEnd={(e) => {this.onZoomEvent(e)}}

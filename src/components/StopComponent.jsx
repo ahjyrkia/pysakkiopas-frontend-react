@@ -100,15 +100,20 @@ class StopComponent extends Component {
   getStopData(e, code) {
     stopService.fetchStopData(code).then((response) => {
       this.props.map.panTo(e.latlng);
-      this.setState({
-        contentExists: true,
-        name: response[0].name_fi,
-        address: response[0].address_fi,
-        code: response[0].code_short,
-        timetableLink: response[0].timetable_link,
-        departures: response[0].departures,
-        lines: response[0].lines
-      })
+      if (!response) {
+      } else {
+        this.setState({
+          contentExists: true,
+          name: response[0].name_fi,
+          address: response[0].address_fi,
+          code: response[0].code_short,
+          timetableLink: response[0].timetable_link,
+          departures: response[0].departures,
+          lines: response[0].lines
+        })
+      }
+    }).catch((error) => {
+      console.log(error)
     })
   }
 

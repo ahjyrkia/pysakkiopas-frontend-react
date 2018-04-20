@@ -9,14 +9,13 @@ const isWithinViewDistance = (coords, viewCoords, zoom) => {
 }
 
 const fetchStopData = (code) => {
-  return fetch('https://pysakkiopas-backend.herokuapp.com/stop/'+code)
-    .then((response) => response.json())
-    .then((responseJson) => {
+  return fetch('https://pysakkiopas-backend.herokuapp.com/stop/' + code)
+    .then((response) => {
+      return response.json()
+    }).then((responseJson) => {
+      console.log(responseJson)
       return responseJson;
-    })
-    .catch((error) => {
-      console.error(error);
-  });
+    });
 }
 
 const fetchStopsData = () => {
